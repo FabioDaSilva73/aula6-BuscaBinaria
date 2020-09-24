@@ -1,1 +1,2 @@
 language = "cpp"
+run = "g++ -o buscaSequencial buscaSequencial.cpp"
