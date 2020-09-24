@@ -8,8 +8,9 @@ using namespace std;
 
 #define MAX 20
 
-#define SORT_VECTOR
+#define SORT_VECTOR 
 
+// 
 // *****************************************************************************************
 // ** Funcao que imprime as chaves contidas em um vetor de N elementos entre o intevalo [i..f]
 // *****************************************************************************************
