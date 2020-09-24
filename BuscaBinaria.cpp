@@ -8,14 +8,14 @@ using namespace std;
 
 #define MAX 20
 
-#define SORT_VECTOR 
+// #define SORT_VECTOR 
 
 // *****************************************************************************************
 // ** Funcao que imprime as chaves contidas em um vetor de N elementos entre o intevalo [i..f]
 // *****************************************************************************************
-void imprimeVetorParcial(vector<int> v, unsigned int i, unsigned int f) {
+void imprimeVetorParcial(vector<int> v, int i, int f) {
 
-unsigned int k = 0;
+int k = 0;
 
     while ( k < i) {
         cout << "-";
@@ -32,37 +32,24 @@ unsigned int k = 0;
     cout << endl;
 }
 
-// ********************************************************************
-// ** Funcao que promove uma busca sequencial em um vetor de N elementos
-// ********************************************************************
-bool buscaSeq(vector<int> v, int k) {
-
-    for (unsigned int i = 0 ; i < v.size() ; i++) {
-        imprimeVetorParcial(v, i, v.size()-1); 
-        if (v[i] == k)                                  // [1..N] => Melhor Caso: O(1)
-            return true; 
-        }                                               //        => Pior Caso  : O(n) 
-                                                        //        => Caso Medio : O(n/2) = O(n)
-    return false;
-}
-
 // *****************************************************************************************
-// ** Funcao que promove uma busca sequencial em um vetor de N elementos ordenados crescente
+// ** Funcao que promove uma busca binaria em um vetor de N elementos ordenados crescente
 // *****************************************************************************************
-bool buscaSeqOrd(vector<int> v, int k) {
+bool buscaBinaria(vector<int> v, int k) {
 
-unsigned int i = 0; 
+int i = 0,
+    f = v.size()-1;
 
-    while ( (i < v.size()) && (v[i] < k) ) {     // Melhor Caso: chave é o primeiro O(1) 
-        imprimeVetorParcial(v, i, v.size()-1);
-        i++;                                    //              k e menor que v[0] O(2)=O(1)    
-        }
-    if ( i == v.size() )                        // Pior Caso:   chave ser o ultimo O(2n-1)=O(n)
-        return false;                           //              k e maior que v[n-1] O(2n)=O(n)
-
-    if (v[i] == k)                              // Caso Medio: O(n/2) = O(n)
-        return true;
-
+    while ( i <= f ) { 
+        imprimeVetorParcial(v, i, f);
+        int m = (i+f) /2;    
+        if (k == v.at(m))              // n / 2^l  = 1 
+          return true;                 // n = 2^l  => log2(n) = log2(2^l) = l. log2(2)
+        if (k < v.at(m))               // l = log2(n) => O(log2(n))
+          f = m - 1;                   // l = 10 ==> 2^10 = 1024 
+        else                           // l = 11 ==> 2^11 = 2048 
+          i = m + 1; 
+        }             
     return false;
 }
 
@@ -81,9 +68,7 @@ vector<int> v;
         v.push_back(rand() % MAX*10);
         }
 
-#ifdef SORT_VECTOR
     sort(v.begin(), v.end());
-#endif
 
     cout << "conteudo de v: " << endl << "---------------" << endl;
     
@@ -91,14 +76,14 @@ vector<int> v;
     
     int chave = v.at(rand() % (MAX));
 
-#ifdef SORT_VECTOR
-    cout << "BuscaSeqOrd por " << chave << " : " << endl << "-------------------" << endl;    
-    if (buscaSeqOrd(v, chave))
-#else
+//#ifdef SORT_VECTOR
+    cout << "BuscaBinaria por " << chave << " : " << endl << "-------------------" << endl;    
+    if (buscaBinaria(v, chave))
+/* #else
     cout << "BuscaSeq por " << chave << " : " << endl << "-------------------" << endl;    
     if (buscaSeq(v, chave))
 #endif
-
+*/
        cout << "Encontrei a chave " << chave << endl;
     else
        cout << "Nao Encontrei a chave " << chave << endl;
@@ -106,26 +91,30 @@ vector<int> v;
 
     chave =  MAX * 100;
 
-#ifdef SORT_VECTOR
-    cout << "BuscaSeqOrd por " << chave << " : " << endl << "-------------------" << endl;    
-    if (buscaSeqOrd(v, chave))
+//#ifdef SORT_VECTOR
+    cout << "BuscaBinaria por " << chave << " : " << endl << "-------------------" << endl;    
+    if (buscaBinaria(v, chave))
+/*
 #else
     cout << "BuscaSeq por " << chave << " : " << endl << "-------------------" << endl;    
     if (buscaSeq(v, chave))
 #endif
+*/
                cout << "Encontrei a chave " << chave << endl;
     else
        cout << "Nao Encontrei a chave " << chave << endl;
 
     chave = -1;
 
-#ifdef SORT_VECTOR
-    cout << "BuscaSeqOrd por " << chave << " : " << endl << "-------------------" << endl;    
-    if (buscaSeqOrd(v, chave))
+//#ifdef SORT_VECTOR
+    cout << "BuscaBinaria por " << chave << " : " << endl << "-------------------" << endl;    
+    if (buscaBinaria(v, chave))
+/*
 #else
     cout << "BuscaSeq por " << chave << " : " << endl << "-------------------" << endl;    
     if (buscaSeq(v, chave))
 #endif
+*/
        cout << "Encontrei a chave " << chave << endl;
     else
        cout << "Nao Encontrei a chave " << chave << endl;
